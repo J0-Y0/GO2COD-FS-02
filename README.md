@@ -9,6 +9,7 @@ Store-Market is a scalable and secure eCommerce application built using Django a
 - **Order Processing**: Endpoints for placing and managing orders.
 - **Stress and Performance Testing**: Load testing with Locust.
 - **Automation Testing**: Automated API tests using Pytest.
+- **Logging**: Production logging .
 - **Dependency Management**: Managed using Pipenv.
 
 ## Backend Technology Stack
