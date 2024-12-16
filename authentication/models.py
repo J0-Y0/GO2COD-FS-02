@@ -8,9 +8,9 @@ class CustomUserManager(BaseUserManager):
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
 
-        # Set username to email
-        username = email
-        user = self.model(email=email, username=username, **extra_fields)
+        # Use email as username
+        extra_fields.setdefault("username", email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -24,9 +24,7 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        username = email
-
-        return self.create_user(email, password, username=username, **extra_fields)
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -36,8 +34,8 @@ class User(AbstractUser):
     username = models.CharField(
         max_length=255,
         unique=False,
-        default="Your email used as username",
-        editable=False,
+        editable=False,  # Prevent editing in forms/admin
+        default="",  # Default to empty string
     )
 
     USERNAME_FIELD = "email"
@@ -45,5 +43,10 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
 
+    def save(self, *args, **kwargs):
+        # Ensure username is always set to email
+        self.username = self.email
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.email  # Optional: To return email for the user representation
+        return self.email

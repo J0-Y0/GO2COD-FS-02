@@ -48,8 +48,9 @@ from django.contrib.auth.models import Permission
 def create_user():
     def do_create(is_staff=False, codenames=None):
         user = User.objects.create_user(
-            username="testuser",
+            # username="test@test.com",
             password="password",
+            email="test@test.com",
             is_staff=is_staff,
         )
         if codenames is not None:
