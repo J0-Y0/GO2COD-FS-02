@@ -13,6 +13,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.import_export",
+    "unfold.contrib.filters",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

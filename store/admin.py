@@ -13,8 +13,14 @@ from unfold.contrib.import_export.forms import (
     ImportForm,
     SelectableFieldsExportForm,
 )
-
-
+from unfold.contrib.filters.admin import (
+    ChoicesDropdownFilter,
+    MultipleChoicesDropdownFilter,
+    RelatedDropdownFilter,
+    MultipleRelatedDropdownFilter,
+    DropdownFilter,
+    MultipleDropdownFilter,
+)
 from django.db.models import Count, F
 
 
@@ -147,6 +153,7 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin, ImportExportModelAdmin):
+    list_filter_submit = True
     # action
     actions = [clear_inventory]
 
@@ -159,7 +166,12 @@ class ProductAdmin(ModelAdmin, ImportExportModelAdmin):
     ]
     list_select_related = ["collection"]
 
-    list_filter = ["collection__title", "last_update", InventoryStatusFilter]
+    list_filter = [
+        ("collection", RelatedDropdownFilter),
+        "last_update",
+        InventoryStatusFilter,
+    ]
+
     list_editable = ["price"]
     list_per_page = 10
     search_fields = ["title", "description"]
